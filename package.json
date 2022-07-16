@@ -1,0 +1,29 @@
+{
+	"name": "svelte-test",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"package": "svelte-kit package",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/kit": "next",
+		"svelte": "^3.44.0",
+		"vite": "^2.9.13"
+	},
+	"type": "module",
+	"dependencies": {
+		"@codemirror/lang-javascript": "github:codemirror/lang-javascript",
+		"@codemirror/theme-one-dark": "^6.0.0",
+		"codemirror": "^6.0.1",
+		"modern-css-reset": "^1.4.0",
+		"the-new-css-reset": "^1.7.2",
+		"xterm": "^4.20.0-beta.6",
+		"y-codemirror.next": "^0.3.0",
+		"y-webrtc": "^10.2.3",
+		"yjs": "^13.5.39"
+	}
+}
