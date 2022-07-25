@@ -8,7 +8,6 @@
     import { EditorState } from '@codemirror/state';
     import { keymap } from '@codemirror/view';
     import { indentWithTab } from "@codemirror/commands"
-    import { javascript } from "@codemirror/lang-javascript";
     import { oneDark } from "@codemirror/theme-one-dark";
 
     import { afterUpdate } from "svelte";
@@ -32,7 +31,6 @@
                     yUndoManagerKeymap,
                 ]),
                 basicSetup,
-                javascript(),
                 EditorView.lineWrapping,
                 yCollab(ytext, provider.awareness),
                 oneDark,
