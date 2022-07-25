@@ -14,14 +14,8 @@
 
     afterUpdate(() => {
         const ydoc = new Doc();
-        const provider = new WebrtcProvider("codemirror6-demo-room", ydoc);
+        const provider = new WebrtcProvider("codemirror6-alistair-demo-room", ydoc);
         const ytext = ydoc.getText("codemirror");
-
-        // provider.awareness.setLocalStateField('user', {
-        //     name: 'Anonymous ' + Math.floor(Math.random() * 100),
-        //     color: userColor.color,
-        //     colorLight: userColor.light
-        // })
 
         const state = EditorState.create({
             doc: ytext.toString(),
