@@ -15,3 +15,12 @@
 </script>
 
 <div id='terminal'></div>
+
+<style>
+    #terminal {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      padding-left: 50%;
+    }
+</style>
