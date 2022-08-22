@@ -28,7 +28,7 @@ def path(p):
 builtin_parameters['config_map'] = config_map
 
 # Make sure we can find the lit package.
-llvm_source_root = path(r'../../llvm')
+llvm_source_root = path(r'../../llvm-project/llvm')
 sys.path.insert(0, os.path.join(llvm_source_root, 'utils', 'lit'))
 
 if __name__=='__main__':
