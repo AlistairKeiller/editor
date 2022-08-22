@@ -10,9 +10,6 @@
 
 <button on:click={compile}>Compile</button>
 
-<!-- <Xterm/>
-<Codemirror/> -->
-
 <style>
     :global(body) {
         margin: 0;
