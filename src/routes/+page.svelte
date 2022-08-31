@@ -12,8 +12,6 @@
 int main() {
     return 0;
 }` );
-        // console.log(clang.FS.open('/'));
-        console.log(clang.FS.open('/lib/clang/16.0.0/include'));
         clang.callMain([ '-cc1', '-emit-obj', '-I', '/lib/clang/16.0.0/include/c++/v1', '-I', '/lib/clang/16.0.0/include', 'main.cpp' ]); // '-fcolor-diagnostics'
         ld.FS.writeFile('main.o', clang.FS.readFile('main.o'));
         ld.callMain([ '-flavor', 'wasm', '-L/wlib', '-lc', '-lc++', '-lc++abi', '/wlib/libclang_rt.builtins-wasm32.a', '/wlib/crt1.o', 'main.o', '-o', 'main.wasm' ]);
