@@ -1,9 +1,13 @@
 <script>
-    const worker = new Worker('/src/lib/worker.ts', { type: 'module' });
+    import Codemirror from '$lib/Codemirror.svelte';
+    import Xterm from '$lib/Xterm.svelte';
+
+    const worker = new Worker('/src/lib/worker.js', { type: 'module' });
     worker.onmessage = (e) => {
         switch(e.data.type) {
             case 'ready':
                 // ready up
+                console.log("ready");
                 break;
             case 'stdout':
                 console.log(e.data.message);
@@ -11,7 +15,6 @@
             default:
                 console.log("error: Unkown data", e.data);
         }
-        console.log(e.data);
     };
 //         worker.postMessage(
 // `#include <iostream>
@@ -20,3 +23,12 @@
 // }` );
     // };
 </script>
+
+<Codemirror />
+<Xterm />
+
+<style>
+    :global(body) {
+        margin: 0;
+    }
+</style>

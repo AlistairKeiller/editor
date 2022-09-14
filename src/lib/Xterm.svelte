@@ -6,27 +6,29 @@
     import { afterUpdate } from 'svelte';
 
     afterUpdate(() => {
+        // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
         const terminal = new Terminal({
             theme: {
-                selection:     '#565656',
-                background:    '#1e1e1e',
-                foreground:    '#cccccc',
-                black:         '#000000',
-                red:           '#cd3131',
-                green:         '#0dbc79',
-                yellow:        '#e5e510',
-                blue:          '#2472c8',
-                magenta:       '#bc3fbc',
-                cyan:          '#11a8cd',
-                white:         '#e5e5e5',
-                brightBlack:   '#666666',
-                brightRed:     '#f14c4c',
-                brightGreen:   '#23d18b',
-                brightYellow:  '#f5f543',
-                brightBlue:    '#3b8eea',
-                brightMagenta: '#d670d6',
-                brightCyan:    '#29b8db',
-                brightWhite:   '#e5e5e5',
+                black: '#3f4451',
+                blue: '#4aa5f0',
+                brightBlack: '#4f5666',
+                brightBlue: '#4dc4ff',
+                brightCyan: '#4cd1e0',
+                brightGreen: '#a5e075',
+                brightMagenta: '#de73ff',
+                brightRed: '#ff616e',
+                brightWhite: '#e6e6e6',
+                BrightYellow: '#f0a45d',
+                cyan: '#42b3c2',
+                green: '#8cc265',
+                magenta: '#c162de',
+                red: '#e05561',
+                white: '#d7dae0',
+                yellow: '#d18f52',
+                background: '#282c34',
+                border: '#3e4452',
+                foreground: '#abb2bf',
+                selection: '#abb2bf30',
             },
         });
         const fitAddon = new FitAddon();
@@ -42,8 +44,8 @@
 <style>
     #terminal {
       position: absolute;
+      margin-left: 50%;
       width: 50%;
       height: 100%;
-      padding-left: 50%;
     }
 </style>

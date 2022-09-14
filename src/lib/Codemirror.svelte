@@ -12,9 +12,9 @@
 
     import { EditorState } from '@codemirror/state';
 
-    import { afterUpdate } from "svelte";
+    import { onMount } from "svelte";
 
-    afterUpdate(() => {
+    onMount(() => {
         const ydoc = new Doc();
         const provider = new WebrtcProvider("codemirror6-alistair-demo-room", ydoc);
         const ytext = ydoc.getText("codemirror");
