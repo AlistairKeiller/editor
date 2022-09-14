@@ -5,10 +5,12 @@
     import { WebrtcProvider } from "y-webrtc";
 
     import { EditorView, basicSetup } from "codemirror";
-    import { EditorState } from '@codemirror/state';
     import { keymap } from '@codemirror/view';
+
     import { indentWithTab } from "@codemirror/commands"
     import { oneDark } from "@codemirror/theme-one-dark";
+
+    import { EditorState } from '@codemirror/state';
 
     import { afterUpdate } from "svelte";
 
@@ -22,7 +24,7 @@
             extensions: [
                 keymap.of([
                     indentWithTab,
-                    yUndoManagerKeymap,
+                    ...yUndoManagerKeymap,
                 ]),
                 basicSetup,
                 EditorView.lineWrapping,
