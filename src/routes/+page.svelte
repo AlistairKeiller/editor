@@ -1,5 +1,5 @@
 <script>
-    import '$lib/global.css';
+    import './+page.css';
     import Codemirror from '$lib/Codemirror.svelte';
     import Xterm from '$lib/Xterm.svelte';
 
