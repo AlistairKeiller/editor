@@ -50,11 +50,3 @@
 </script>
     
 <div id="codemirror" />
-
-<style>
-    #codemirror {
-      position: absolute;
-      width: 50%;
-      height: 100%;
-    }
-</style>

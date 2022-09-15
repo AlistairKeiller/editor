@@ -1,11 +1,12 @@
 <script>
     import 'xterm/css/xterm.css';
+    import '$lib/Xterm.css';
     import { Terminal } from 'xterm';
     import { FitAddon } from 'xterm-addon-fit';
 
-    import { afterUpdate } from 'svelte';
+    import { onMount } from 'svelte';
 
-    afterUpdate(() => {
+    onMount(() => {
         // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
         const terminal = new Terminal({
             theme: {
@@ -40,12 +41,3 @@
 </script>
 
 <div id='terminal' />
-
-<style>
-    #terminal {
-      position: absolute;
-      margin-left: 50%;
-      width: 50%;
-      height: 100%;
-    }
-</style>
