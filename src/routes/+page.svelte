@@ -1,4 +1,5 @@
 <script>
+    import '$lib/global.css';
     import Codemirror from '$lib/Codemirror.svelte';
     import Xterm from '$lib/Xterm.svelte';
 
@@ -16,19 +17,7 @@
                 console.log("error: Unkown data", e.data);
         }
     };
-//         worker.postMessage(
-// `#include <iostream>
-// int main() {
-//     std::cout << "Hello World! This is a test";
-// }` );
-    // };
 </script>
 
 <Codemirror />
 <Xterm />
-
-<style>
-    :global(body) {
-        margin: 0;
-    }
-</style>
