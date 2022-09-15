@@ -39,7 +39,7 @@
 	});
 </script>
 
-<div id='terminal'></div>
+<div id='terminal' />
 
 <style>
     #terminal {
