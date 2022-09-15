@@ -40,4 +40,4 @@
 	});
 </script>
 
-<div id='terminal' />
+<div id='terminal' class="bg-[#282c34]"/>
