@@ -14,6 +14,7 @@
     import { indentWithTab } from "@codemirror/commands"
     import { oneDark } from "@codemirror/theme-one-dark";
     import { EditorState } from '@codemirror/state';
+    import { cpp } from '@codemirror/lang-cpp';
 
     // svelte imports
     import { onMount } from 'svelte';
@@ -32,6 +33,7 @@
                 indentWithTab,
             ]),
             basicSetup,
+            cpp(),
             EditorView.lineWrapping,
             oneDark,
             EditorView.theme({
