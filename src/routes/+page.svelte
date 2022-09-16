@@ -2,9 +2,8 @@
     // xterm imports
     import 'xterm/css/xterm.css';
     import '$lib/Xterm.css';
-    import { Terminal } from 'xterm';
-    import { FitAddon } from 'xterm-addon-fit';
-    import { Readline } from "xterm-readline";
+    // import { Terminal } from 'xterm';
+    // import { FitAddon } from 'xterm-addon-fit';
 
     // yjs imports
     import { Doc } from "yjs";
@@ -22,7 +21,44 @@
     import { onMount } from 'svelte';
 
     // terminal preDOM setup
-    const terminal = new Terminal({
+    let terminal;
+
+    // codemirror preDOM setup
+    let codemirror;
+    const state = EditorState.create({
+        extensions: [
+            keymap.of([
+                indentWithTab,
+            ]),
+            basicSetup,
+            EditorView.lineWrapping,
+            oneDark,
+            EditorView.theme({
+                '&': { height: '100%' },
+                "&.cm-editor": {
+                    "&.cm-focused": {
+                        outline: 'none'
+                    }
+                },
+                '.cm-scroller::-webkit-scrollbar': { width: '12px' },
+                '.cm-scroller::-webkit-scrollbar-thumb': { backgroundColor: '#ffffff20' },
+            }),
+        ],
+    });
+    
+
+    // DOM setup
+    onMount(async () => {
+        // codemirror DOM setup
+        const view = new EditorView({
+            state,
+            parent: codemirror
+        });
+
+        // xterm DOM setup
+        const { Terminal } = (await import("xterm"));
+        const { FitAddon } = (await import("xterm-addon-fit"));
+        const xterm = new Terminal({
             theme: { // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
                 black: '#3f4451',
                 blue: '#4aa5f0',
@@ -46,52 +82,11 @@
                 selection: '#abb2bf30',
             },
         });
-    const fitAddon = new FitAddon();
-    const rl = new Readline();
-    terminal.loadAddon(fitAddon);
-    terminal.loadAddon(rl);
-
-    // codemirror preDOM setup
-    const ydoc = new Doc();
-    const provider = new WebrtcProvider("codemirror6-alistair-demo-room", ydoc);
-    const ytext = ydoc.getText("codemirror");
-    const state = EditorState.create({
-        doc: ytext.toString(),
-        extensions: [
-            keymap.of([
-                indentWithTab,
-                ...yUndoManagerKeymap,
-            ]),
-            basicSetup,
-            EditorView.lineWrapping,
-            yCollab(ytext, provider.awareness),
-            oneDark,
-            EditorView.theme({
-                '&': { height: '100%' },
-                "&.cm-editor": {
-                    "&.cm-focused": {
-                        outline: 'none'
-                    }
-                },
-                '.cm-scroller::-webkit-scrollbar': { width: '12px' },
-                '.cm-scroller::-webkit-scrollbar-thumb': { backgroundColor: '#ffffff20' },
-            }),
-        ],
-    });
-
-    // DOM setup
-    onMount(() => {
-        // xterm DOM setup
-        terminal.open(document.getElementById('terminal'));
+        const fitAddon = new FitAddon();
+        xterm.loadAddon(fitAddon);
+        xterm.open(terminal);
         fitAddon.fit();
-        terminal.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
-        rl.read("");
-
-        // codemirror DOM setup
-        const view = new EditorView({
-            state,
-            parent: document.getElementById("codemirror")
-        });
+        xterm.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
 	});
 
     let running = true;
@@ -127,6 +122,6 @@
             </button>
         {/if}
     </div>
-    <div id="codemirror" />
-    <div id='terminal' class="bg-[#282c34]"/>
+    <div bind:this={codemirror} class="bg-[#282c34]" />
+    <div bind:this={terminal} class="bg-[#282c34]" />
 </div>
