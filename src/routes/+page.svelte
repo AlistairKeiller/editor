@@ -57,7 +57,7 @@
         });
 
         // xterm DOM setup
-        const [{ Terminal }, { FitAddon } ] = await Promise.all([import("xterm"), import("xterm-addon-fit")]);
+        const [{ Terminal }, { FitAddon }, { WebglAddon } ] = await Promise.all([import("xterm"), import("xterm-addon-fit"), import("xterm-addon-webgl")]);
         const xterm = new Terminal({
             theme: { // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
                 black: '#3f4451',
@@ -81,10 +81,12 @@
                 foreground: '#abb2bf',
                 selection: '#abb2bf30',
             },
+            allowProposedApi: true,
         });
         xterm.open(terminal);
         const fitAddon = new FitAddon();
         xterm.loadAddon(fitAddon);
+        xterm.loadAddon(new WebglAddon());
         fitAddon.fit();
         xterm.write([
     '',
