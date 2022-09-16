@@ -2,9 +2,6 @@
     // xterm imports
     import 'xterm/css/xterm.css';
     import '$lib/Xterm.css';
-    // import { Terminal } from 'xterm';
-    // import { FitAddon } from 'xterm-addon-fit';
-    // import { WebglAddon } from 'xterm-addon-webgl';
 
     // yjs imports
     // import { Doc } from "yjs";
@@ -23,10 +20,12 @@
 
     // terminal preDOM setup
     let terminal;
+    let xterm;
     let fitAddon;
 
     // codemirror preDOM setup
     let codemirror;
+    let view;
     const state = EditorState.create({
         extensions: [
             keymap.of([
@@ -48,18 +47,26 @@
         ],
     });
     
+    // backend preDOM setup
+    let worker;
+    let buttonState = "loading";
+    function readyClicked() {
+        buttonState = "running";
+        xterm.reset();
+        worker.postMessage({ type: 'run', 'message': view.state.doc.toString() });
+    }
 
     // DOM setup
     onMount(async () => {
         // codemirror DOM setup
-        const view = new EditorView({
+        view = new EditorView({
             state,
             parent: codemirror
         });
 
         // xterm DOM setup
         const [{ Terminal }, { FitAddon }, { WebglAddon } ] = await Promise.all([import("xterm"), import("xterm-addon-fit"), import("xterm-addon-webgl")]);
-        const xterm = new Terminal({
+        xterm = new Terminal({
             theme: { // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
                 black: '#3f4451',
                 blue: '#4aa5f0',
@@ -105,38 +112,34 @@
             ' │                                                                            │',
             ' └────────────────────────────────────────────────────────────────────────────┘',
         ].join('\n\r'));
+
+        worker = new Worker('/src/lib/worker.js', { type: 'module' });
+        worker.onmessage = (e) => {
+            switch(e.data.type) {
+                case 'ready':
+                    buttonState = "ready";
+                    break;
+                case 'stdout':
+                    xterm.writeln(e.data.message);
+                    break;
+            }
+        };
 	});
-
-    let running = true;
-    function handleClick() {
-        running = !running;
-    }
-
-    // const worker = new Worker('/src/lib/worker.js', { type: 'module' });
-    // worker.onmessage = (e) => {
-    //     switch(e.data.type) {
-    //         case 'ready':
-    //             // ready up
-    //             console.log("ready");
-    //             break;
-    //         case 'stdout':
-    //             console.log(e.data.message);
-    //             break;
-    //         default:
-    //             console.log("error: Unkown data", e.data);
-    //     }
-    // };
 </script>
 
 <div class="grid h-screen grid-cols-2 grid-rows-[1fr_17fr] gap-1 bg-[#20232a]">
     <div class="col-span-full flex justify-center mt-1">
-        {#if running}
-            <button on:click={handleClick} class="bg-green-800 text-green-300 hover:bg-green-600 hover:text-white font-bold w-32 rounded-xl transition-all outline-none drop-shadow-2xl">
+        {#if buttonState == "ready"}
+            <button on:click={readyClicked} class="bg-green-800 text-green-300 hover:bg-green-600 hover:text-white font-bold w-32 rounded-xl transition-all outline-none drop-shadow-2xl">
                 Run
             </button>
-        {:else}
-            <button on:click={handleClick} class="bg-red-800 text-red-300 hover:bg-red-600 hover:text-white font-bold w-32 rounded-xl transition-all outline-none drop-shadow-2xl">
+        {:else if buttonState == "running" }
+            <button class="bg-red-800 text-red-300 hover:bg-red-600 hover:text-white font-bold w-32 rounded-xl transition-all outline-none drop-shadow-2xl">
                 Stop
+            </button>
+        {:else if buttonState == "loading" }
+            <button class="bg-gray-800 text-gray-300 hover:bg-gray-600 hover:text-white font-bold w-32 rounded-xl transition-all outline-none drop-shadow-2xl">
+                Loading...
             </button>
         {/if}
     </div>
