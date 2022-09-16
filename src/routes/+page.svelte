@@ -23,6 +23,7 @@
 
     // terminal preDOM setup
     let terminal;
+    let fitAddon;
 
     // codemirror preDOM setup
     let codemirror;
@@ -84,26 +85,26 @@
             allowProposedApi: true,
         });
         xterm.open(terminal);
-        const fitAddon = new FitAddon();
+        fitAddon = new FitAddon();
         xterm.loadAddon(fitAddon);
         xterm.loadAddon(new WebglAddon());
         fitAddon.fit();
         xterm.writeln([
-    '',
-    '    Basicly All Native (BAN) is a C++ IDE that attempts to combine the',
-    '    power of a full fledged a editor with the ease of use of the browser',
-    '',
-    ' ┌ \x1b[1mFeatures\x1b[0m ──────────────────────────────────────────────────────────────────┐',
-    ' │                                                                            │',
-    ' │  \x1b[31;1mCollaboration just works                \x1b[32mPerformance\x1b[0m                       │',
-    ' │  Just use the share button               BAN uses codemirror 6, xterm.js   │',
-    ' │                                          SvelteKit, yjs, and WebAssembly   │',
-    ' │                                                                            │',
-    ' │  \x1b[33;1mAccessible                              \x1b[34mEasy to use\x1b[0m                       │',
-    ' │  Works on any modern browser             Anyone can use BSC                │',
-    ' │                                                                            │',
-    ' └────────────────────────────────────────────────────────────────────────────┘',
-  ].join('\n\r'));
+            '',
+            '    Basicly All Native (BAN) is a C++ IDE that attempts to combine the',
+            '    power of a full fledged a editor with the ease of use of the browser',
+            '',
+            ' ┌ \x1b[1mFeatures\x1b[0m ──────────────────────────────────────────────────────────────────┐',
+            ' │                                                                            │',
+            ' │  \x1b[31;1mCollaboration just works                \x1b[32mPerformance\x1b[0m                       │',
+            ' │  Just use the share button               BAN uses codemirror 6, xterm.js   │',
+            ' │                                          SvelteKit, yjs, and WebAssembly   │',
+            ' │                                                                            │',
+            ' │  \x1b[33;1mAccessible                              \x1b[34mEasy to use\x1b[0m                       │',
+            ' │  Works on any modern browser             Anyone can use BSC                │',
+            ' │                                                                            │',
+            ' └────────────────────────────────────────────────────────────────────────────┘',
+        ].join('\n\r'));
 	});
 
     let running = true;
@@ -140,5 +141,7 @@
         {/if}
     </div>
     <div bind:this={codemirror} class="bg-[#282c34]" />
-    <div bind:this={terminal} class="bg-[#282c34]" />
+    <div bind:this={terminal} class="bg-[#282c34] overflow-hidden" />
 </div>
+
+<svelte:window on:resize={() => fitAddon.fit()} />
