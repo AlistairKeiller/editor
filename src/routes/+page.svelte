@@ -4,11 +4,12 @@
     import '$lib/Xterm.css';
     // import { Terminal } from 'xterm';
     // import { FitAddon } from 'xterm-addon-fit';
+    // import { WebglAddon } from 'xterm-addon-webgl';
 
     // yjs imports
-    import { Doc } from "yjs";
-    import { yCollab, yUndoManagerKeymap } from "y-codemirror.next";
-    import { WebrtcProvider } from "y-webrtc";
+    // import { Doc } from "yjs";
+    // import { yCollab, yUndoManagerKeymap } from "y-codemirror.next";
+    // import { WebrtcProvider } from "y-webrtc";
 
     // codemirror imports
     import { EditorView, basicSetup } from "codemirror";
@@ -56,8 +57,7 @@
         });
 
         // xterm DOM setup
-        const { Terminal } = (await import("xterm"));
-        const { FitAddon } = (await import("xterm-addon-fit"));
+        const [{ Terminal }, { FitAddon } ] = await Promise.all([import("xterm"), import("xterm-addon-fit")]);
         const xterm = new Terminal({
             theme: { // theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
                 black: '#3f4451',
@@ -82,11 +82,29 @@
                 selection: '#abb2bf30',
             },
         });
+        xterm.open(terminal);
         const fitAddon = new FitAddon();
         xterm.loadAddon(fitAddon);
-        xterm.open(terminal);
         fitAddon.fit();
-        xterm.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+        xterm.write([
+    '',
+    '    Basicly Client Side (BCS) is a java IDE that attempts to combine the',
+    '    power of a full fledged a editor with the ease of use of the browser',
+    '',
+    ' ┌ \x1b[1mFeatures\x1b[0m ──────────────────────────────────────────────────────────────────┐',
+    ' │                                                                            │',
+    ' │  \x1b[31;1mCollaboration just works                \x1b[32mPerformance\x1b[0m                       │',
+    ' │  have collaborators join                 xterm.js, codemirror 6, yjs, and  │',
+    ' │  alicalik1.github.io/editorv3/text       doppioJVM maximize performance    │',
+    ' │                                                                            │',
+    ' │  \x1b[33;1mAccessible                              \x1b[34mEasy to learn\x1b[0m                     │',
+    ' │  Works on any browser                    Anyone can quickly learn BSC      │',
+    ' │                                                                            │',
+    ' └────────────────────────────────────────────────────────────────────────────┘',
+    '',
+    '    Just a note: "loading..." means loading an entire JVM',
+    '    and javascript JVM emulator which can take a while.',
+  ].join('\n\r'));
 	});
 
     let running = true;
