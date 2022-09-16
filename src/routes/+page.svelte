@@ -4,6 +4,7 @@
     import '$lib/Xterm.css';
     import { Terminal } from 'xterm';
     import { FitAddon } from 'xterm-addon-fit';
+    import { Readline } from "xterm-readline";
 
     // yjs imports
     import { Doc } from "yjs";
@@ -46,7 +47,9 @@
             },
         });
     const fitAddon = new FitAddon();
+    const rl = new Readline();
     terminal.loadAddon(fitAddon);
+    terminal.loadAddon(rl);
 
     // codemirror preDOM setup
     const ydoc = new Doc();
@@ -82,6 +85,7 @@
         terminal.open(document.getElementById('terminal'));
         fitAddon.fit();
         terminal.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+        rl.read("");
 
         // codemirror DOM setup
         const view = new EditorView({
