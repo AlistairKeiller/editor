@@ -1,12 +1,7 @@
-<script>
+<script lang="ts">
 	// xterm imports
 	import 'xterm/css/xterm.css';
 	import '$lib/Xterm.css';
-
-	// yjs imports
-	// import { Doc } from "yjs";
-	// import { yCollab, yUndoManagerKeymap } from "y-codemirror.next";
-	// import { WebrtcProvider } from "y-webrtc";
 
 	// codemirror imports
 	import { EditorView, basicSetup } from 'codemirror';
@@ -20,13 +15,11 @@
 	import { onMount } from 'svelte';
 
 	// terminal preDOM setup
-	let terminal;
-	let xterm;
-	let fitAddon;
+	let terminal: HTMLElement;
+	let fit = function () {};
 
 	// codemirror preDOM setup
-	let codemirror;
-	let view;
+	let codemirror: HTMLElement;
 	const state = EditorState.create({
 		extensions: [
 			keymap.of([indentWithTab]),
@@ -48,18 +41,13 @@
 	});
 
 	// backend preDOM setup
-	let worker;
 	let buttonState = 'loading';
-	function readyClicked() {
-		buttonState = 'running';
-		xterm.reset();
-		worker.postMessage({ type: 'run', message: view.state.doc.toString() });
-	}
+	let readyClicked = function () {};
 
 	// DOM setup
 	onMount(async () => {
 		// codemirror DOM setup
-		view = new EditorView({
+		const view = new EditorView({
 			state,
 			parent: codemirror
 		});
@@ -70,7 +58,7 @@
 			import('xterm-addon-fit'),
 			import('xterm-addon-webgl')
 		]);
-		xterm = new Terminal({
+		const xterm = new Terminal({
 			theme: {
 				// theme from https://github.com/Binaryify/OneDark-Pro/blob/master/src/themes/data/oneDarkPro.ts
 				black: '#3f4451',
@@ -82,7 +70,7 @@
 				brightMagenta: '#de73ff',
 				brightRed: '#ff616e',
 				brightWhite: '#e6e6e6',
-				BrightYellow: '#f0a45d',
+				brightYellow: '#f0a45d',
 				cyan: '#42b3c2',
 				green: '#8cc265',
 				magenta: '#c162de',
@@ -90,14 +78,12 @@
 				white: '#d7dae0',
 				yellow: '#d18f52',
 				background: '#282c34',
-				border: '#3e4452',
-				foreground: '#abb2bf',
-				selection: '#abb2bf30'
+				foreground: '#abb2bf'
 			},
 			allowProposedApi: true
 		});
 		xterm.open(terminal);
-		fitAddon = new FitAddon();
+		const fitAddon = new FitAddon();
 		xterm.loadAddon(fitAddon);
 		xterm.loadAddon(new WebglAddon());
 		fitAddon.fit();
@@ -119,8 +105,12 @@
 				' └────────────────────────────────────────────────────────────────────────────┘'
 			].join('\n\r')
 		);
+		fit = function () {
+			fitAddon.fit();
+		};
 
-		worker = new Worker('/src/lib/worker.js', { type: 'module' });
+		// backend DOM setup
+		const worker = new Worker('/src/lib/worker.ts', { type: 'module' });
 		worker.onmessage = (e) => {
 			switch (e.data.type) {
 				case 'ready':
@@ -130,6 +120,11 @@
 					xterm.writeln(e.data.message);
 					break;
 			}
+		};
+		readyClicked = function () {
+			buttonState = 'running';
+			xterm.reset();
+			worker.postMessage({ type: 'run', message: view.state.doc.toString() });
 		};
 	});
 </script>
@@ -161,4 +156,4 @@
 	<div bind:this={terminal} class="bg-[#282c34] overflow-hidden" />
 </div>
 
-<svelte:window on:resize={() => fitAddon.fit()} />
+<svelte:window on:resize={fit} />
